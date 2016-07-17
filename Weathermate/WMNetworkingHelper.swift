@@ -8,6 +8,17 @@
 
 import Foundation
 
-class WMNetworkingHelper: NSObject {
+final class WMNetworkingHelper: NSObject {
+    static let sharedInstance = WMNetworkingHelper()
+    
+
+        func retrieveWeather(completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
+
+    }
+
+
+
+
+
 
 }

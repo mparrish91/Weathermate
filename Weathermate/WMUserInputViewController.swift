@@ -8,6 +8,15 @@
 
 import UIKit
 
-class WMUserInputViewController: UIViewController {
+final class WMUserInputViewController: UIViewController {
+
+    private var locationTextField: UITextField?
+    private var progressView: UIProgressView?
+
+
+    // MARK: UIViewController
+    override func loadView() {
+
+    }
 
 }

@@ -8,6 +8,24 @@
 
 import UIKit
 
-class WMWeatherCollectionViewController: UICollectionViewController {
+final class WMWeatherCollectionViewController: UICollectionViewController {
+
+    private var forecasts = [WMWeatherResponseObject]()
+
+
+
+
+    func retrieveWeatherNetworkingHelper() {
+
+    }
+
+    func handleRefresh(refreshControl: UIRefreshControl) {
+    }
+
+
+    // MARK: UIViewController
+    override func loadView() {
+
+    }
 
 }
