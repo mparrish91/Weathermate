@@ -14,6 +14,7 @@
 		424A98601D3C081E00CAE45E /* WMUserInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A985F1D3C081E00CAE45E /* WMUserInputViewController.swift */; };
 		424A98621D3C088100CAE45E /* WMNetworkingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */; };
 		424A98641D3C08AE00CAE45E /* WMWeatherResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */; };
+		424A98661D3CB07600CAE45E /* WMRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98651D3CB07600CAE45E /* WMRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		424A985F1D3C081E00CAE45E /* WMUserInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMUserInputViewController.swift; sourceTree = "<group>"; };
 		424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMNetworkingHelper.swift; sourceTree = "<group>"; };
 		424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMWeatherResponseObject.swift; sourceTree = "<group>"; };
+		424A98651D3CB07600CAE45E /* WMRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				424A985D1D3C07D800CAE45E /* WMWeatherCollectionViewController.swift */,
 				424A985F1D3C081E00CAE45E /* WMUserInputViewController.swift */,
 				424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */,
+				424A98651D3CB07600CAE45E /* WMRequest.swift */,
 				424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */,
 				424A98521D3C075300CAE45E /* Assets.xcassets */,
 				424A98541D3C075300CAE45E /* LaunchScreen.storyboard */,
@@ -145,6 +148,7 @@
 				424A984C1D3C075300CAE45E /* AppDelegate.swift in Sources */,
 				424A985E1D3C07D800CAE45E /* WMWeatherCollectionViewController.swift in Sources */,
 				424A98621D3C088100CAE45E /* WMNetworkingHelper.swift in Sources */,
+				424A98661D3CB07600CAE45E /* WMRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +292,7 @@
 				424A985C1D3C075300CAE45E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

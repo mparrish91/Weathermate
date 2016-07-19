@@ -10,4 +10,22 @@ import Foundation
 
 class WMWeatherResponseObject: NSObject {
 
+    var date : String
+    var high : String
+    var low : String
+    var forecast: String
+
+
+    init(date: String, high: String, low: String, forecast: String) {
+
+        self.date = date
+        self.high = high
+        self.low = low
+        self.forecast = forecast
+
+        super.init()
+
+    }
+
+
 }
