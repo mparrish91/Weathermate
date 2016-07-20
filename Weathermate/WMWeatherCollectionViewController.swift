@@ -48,6 +48,17 @@ final class WMWeatherCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionView
 
+    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return forecasts.count ?? 0
+    }
+
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as? WMWeatherCollectionViewCell
+        
+        cell.backgroundColor = UIColor.orangeColor()
+        return cell
+    }
+
 
     // MARK: UIViewController
 
