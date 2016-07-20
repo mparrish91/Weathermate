@@ -13,7 +13,6 @@ import Foundation
 final class WMRequest: NSObject {
 
     var requestMethod: String
-//    var parameters: [NSObject : AnyObject]
     var URL: NSURL
 
 

@@ -15,6 +15,7 @@
 		424A98621D3C088100CAE45E /* WMNetworkingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */; };
 		424A98641D3C08AE00CAE45E /* WMWeatherResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */; };
 		424A98661D3CB07600CAE45E /* WMRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98651D3CB07600CAE45E /* WMRequest.swift */; };
+		42FF27531D3EE81F007A37E7 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FF27521D3EE81F007A37E7 /* UIColorExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMNetworkingHelper.swift; sourceTree = "<group>"; };
 		424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMWeatherResponseObject.swift; sourceTree = "<group>"; };
 		424A98651D3CB07600CAE45E /* WMRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMRequest.swift; sourceTree = "<group>"; };
+		42FF27521D3EE81F007A37E7 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,11 +68,20 @@
 				424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */,
 				424A98651D3CB07600CAE45E /* WMRequest.swift */,
 				424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */,
+				42FF27511D3EE807007A37E7 /* Helpers */,
 				424A98521D3C075300CAE45E /* Assets.xcassets */,
 				424A98541D3C075300CAE45E /* LaunchScreen.storyboard */,
 				424A98571D3C075300CAE45E /* Info.plist */,
 			);
 			path = Weathermate;
+			sourceTree = "<group>";
+		};
+		42FF27511D3EE807007A37E7 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				42FF27521D3EE81F007A37E7 /* UIColorExtensions.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				424A98601D3C081E00CAE45E /* WMUserInputViewController.swift in Sources */,
+				42FF27531D3EE81F007A37E7 /* UIColorExtensions.swift in Sources */,
 				424A98641D3C08AE00CAE45E /* WMWeatherResponseObject.swift in Sources */,
 				424A984C1D3C075300CAE45E /* AppDelegate.swift in Sources */,
 				424A985E1D3C07D800CAE45E /* WMWeatherCollectionViewController.swift in Sources */,

@@ -15,6 +15,12 @@ class WMWeatherResponseObject: NSObject {
     var low : String
     var forecast: String
 
+    init(dictionary: [String:AnyObject]) {
+        high = dictionary["high"] as? String ?? ""
+        low = dictionary["low"] as? String ?? ""
+        forecast = dictionary["text"] as? String ?? ""
+        date = dictionary["date"] as? String ?? ""
+    }
 
     init(date: String, high: String, low: String, forecast: String) {
 
