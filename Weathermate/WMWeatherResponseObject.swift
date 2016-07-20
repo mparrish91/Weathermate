@@ -22,16 +22,7 @@ class WMWeatherResponseObject: NSObject {
         date = dictionary["date"] as? String ?? ""
     }
 
-    init(date: String, high: String, low: String, forecast: String) {
 
-        self.date = date
-        self.high = high
-        self.low = low
-        self.forecast = forecast
-
-        super.init()
-
-    }
 
 
 }

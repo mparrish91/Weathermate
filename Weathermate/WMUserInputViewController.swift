@@ -53,16 +53,14 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
     
 
 
-    locationTextField.placeholder = "Type here to enter your city.."
     locationTextField.font = UIFont(name: "Avenir-Book", size: 20)
     locationTextField.textColor = UIColor.whiteColor()
-//    locationTextField.layer.borderWidth = 0.0
-    locationTextField.borderStyle = .None
-//    locationTextField.backgroundColor = UIColor.clearColor()
+    locationTextField.attributedPlaceholder = NSAttributedString(string:"Type here to enter your city..", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName :UIFont(name: "Avenir-Book", size: 20)!])
+    locationTextField.textAlignment = .Center
 
 
-    submitButton.hidden = true
-    submitButton.titleLabel?.text = "Submit"
+    submitButton.setTitle("Submit", forState: .Normal)
+    submitButton.titleLabel?.font = UIFont(name: "Avenir-Book", size: 20)
     submitButton.layer.borderWidth = 0.0
     submitButton.titleLabel?.textColor = UIColor.whiteColor()
 
@@ -77,17 +75,37 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
     progressView.topAnchor.constraintEqualToAnchor(titleLabel.layoutMarginsGuide.bottomAnchor, constant: 100).active = true
     progressView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
     progressView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-//
-//
-//    locationTextField.translatesAutoresizingMaskIntoConstraints = false
-//    locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 80).active = true
-//    locationTextField.trailingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 80).active = true
-//    locationTextField.leadingAnchor.constraintEqualToAnchor(progressView.layoutMarginsGuide.bottomAnchor, constant: 100).active = true
-//
-//
-//    submitButton.leadingAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 50).active = true
-//    submitButton.translatesAutoresizingMaskIntoConstraints = false
-//    submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+    locationTextField.translatesAutoresizingMaskIntoConstraints = false
+    locationTextField.topAnchor.constraintEqualToAnchor(progressView.bottomAnchor, constant: 100).active = true
+    locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
+    locationTextField.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+    submitButton.hidden = true
+    submitButton.translatesAutoresizingMaskIntoConstraints = false
+    submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 50).active = true
+    submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+    submitButton.addTarget(self, action: #selector(onSubmitButtonPressed), forControlEvents: .TouchUpInside)
+
+
+
+
+    }
+
+    func onSubmitButtonPressed(sender: UIButton) {
+
+        if let city = locationTextField.text {
+            WMNetworkingHelper.sharedInstance.retrieveWeather(city) { (data, error) in
+
+                if let weatherVC = WMWeatherCollectionViewController(forecasts: data) {
+                    self.presentViewController(weatherVC, animated: true, completion: nil)
+                }
+
+
+            }
+
+        }
+
 
 
     }
@@ -132,11 +150,10 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
 
     override func loadView() {
         self.view = UIView()
-//        self.view.addSubview(locationTextField)
+        self.view.addSubview(locationTextField)
         self.view.addSubview(progressView)
         self.view.addSubview(titleLabel)
-//        self.view.addSubview(submitButton)
-//        locationTextField.frame =
+        self.view.addSubview(submitButton)
     }
 
 }

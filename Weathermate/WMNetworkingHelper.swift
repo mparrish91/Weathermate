@@ -14,16 +14,16 @@ final class WMNetworkingHelper: NSObject {
     static let sharedInstance = WMNetworkingHelper()
     
 
-//    func retrieveWeather(city: String, completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
+    func retrieveWeather(city: String, completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
 
-        func retrieveWeather(completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
+//        func retrieveWeather(completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
 
 
-//        let requestURL = newYahooQueryURL(city)
+        let requestURL = newYahooQueryURL(city)
 
-        let requestURL = NSURL(string: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22nome%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
+//        let requestURL = NSURL(string: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22nome%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
 
-            let getRequest = WMRequest(requestMethod: "GET", url: requestURL!)
+            let getRequest = WMRequest(requestMethod: "GET", url: requestURL)
 
             getRequest.performRequestWithHandler(
                 { (success: Bool, object: AnyObject?) -> Void in
@@ -50,18 +50,15 @@ final class WMNetworkingHelper: NSObject {
                                     //user entered bad city input
                                     NSNotificationCenter.defaultCenter().postNotificationName("badCity", object: nil)
 
-
                                 }
                             }
                         }else {
                             print("error retrieving dataSource")
-                            
+
                         }
                     }else{
                         print("error performing request")
                     }
-                    
-                    
                     
             })
             

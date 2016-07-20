@@ -26,7 +26,6 @@ final class WMRequest: NSObject {
 
     init(requestMethod: String, url: NSURL) {
         self.requestMethod = requestMethod
-//        self.parameters = parameters
         self.URL = url
 
     }
