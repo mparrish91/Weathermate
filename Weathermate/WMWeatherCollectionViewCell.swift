@@ -9,29 +9,51 @@
 import UIKit
 
 
-struct MyIcon {
-    static let plane = Icon.plane(img: UIImage(named: "image.png")!, col: UIColor.blueColor())
-    static let arrow = Icon.arrow(img: UIImage(named: "image.png")!, col: UIColor.blueColor())
-    static let logo = Icon.logo(img: UIImage(named: "image.png")!, col: UIColor.blueColor())
-    static let flag = Icon.flag(img: UIImage(named: "image.png")!, col: UIColor.blueColor())
-}
-
 
 
 class WMWeatherCollectionViewCell: UICollectionViewCell {
 
-    private var forecastImageView: UIImageView
-    private var highLabel: UILabel
-    private var lowLabel: UILabel
-    private var dateLabel: UILabel
+    var forecastImageView: UIImageView
+    var highLabel: UILabel
+    var lowLabel: UILabel
+    var dateLabel: UILabel
 
     override init(frame: CGRect) {
+
         self.forecastImageView = UIImageView()
         self.highLabel = UILabel()
         self.lowLabel = UILabel()
         self.dateLabel = UILabel()
 
         super.init(frame: frame)
+
+        self.layer.cornerRadius = 4
+        self.layer.masksToBounds = true
+
+        contentView.addSubview(forecastImageView)
+//        contentView.addSubview(highLabel)
+//        contentView.addSubview(lowLabel)
+        contentView.addSubview(dateLabel)
+
+        let margins = contentView.layoutMarginsGuide
+
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 20).active = true
+        dateLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 5).active = true
+        dateLabel.font = UIFont(name: "Avenir-Book", size: 14)
+        dateLabel.textColor = UIColor.whiteColor()
+
+
+
+        forecastImageView.translatesAutoresizingMaskIntoConstraints = false
+        forecastImageView.topAnchor.constraintEqualToAnchor(dateLabel.bottomAnchor, constant: 5).active = true
+        forecastImageView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 5).active = true
+        forecastImageView.widthAnchor.constraintEqualToAnchor(nil, constant: 50).active = true
+        forecastImageView.heightAnchor.constraintEqualToAnchor(nil, constant: 50).active = true
+
+
+
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,10 +63,6 @@ class WMWeatherCollectionViewCell: UICollectionViewCell {
 
 
     override func layoutSubviews() {
-        self.contentView.addSubview(forecastImageView)
-        self.contentView.addSubview(highLabel)
-        self.contentView.addSubview(lowLabel)
-        self.contentView.addSubview(dateLabel)
 
 
     }

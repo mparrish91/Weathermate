@@ -19,11 +19,13 @@ final class WMNetworkingHelper: NSObject {
 //        func retrieveWeather(completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
 
 
-        let requestURL = newYahooQueryURL(city)
+        let newURL = NSURL(string:newYahooQueryURL(city))
 
 //        let requestURL = NSURL(string: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22nome%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
 
-            let getRequest = WMRequest(requestMethod: "GET", url: requestURL)
+        if let requestUrl = newURL {
+
+            let getRequest = WMRequest(requestMethod: "GET", url: requestUrl)
 
             getRequest.performRequestWithHandler(
                 { (success: Bool, object: AnyObject?) -> Void in
@@ -61,7 +63,8 @@ final class WMNetworkingHelper: NSObject {
                     }
                     
             })
-            
+        }
+
     }
 
 
@@ -69,8 +72,8 @@ final class WMNetworkingHelper: NSObject {
     func newYahooQueryURL(city: String) -> String {
 
         //properly places the city in the query string, does not account for state
-        var beginningString = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%"
-        var endingString = "22%2C%20%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+        var beginningString = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"
+        var endingString = "%2C%20%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
         let URL = beginningString + city + endingString
         return URL
 

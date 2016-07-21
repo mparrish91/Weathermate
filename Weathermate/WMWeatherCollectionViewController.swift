@@ -8,10 +8,10 @@
 
 import UIKit
 
-final class WMWeatherCollectionViewController: UICollectionViewController {
+final class WMWeatherCollectionViewController: UICollectionViewController  {
 
     private var forecasts: [WMWeatherResponseObject]
-    private var weatherCollectionView: UICollectionView
+//    private var weatherCollectionView: UICollectionView
 
 
     required convenience init?(coder aDecoder: NSCoder) {
@@ -20,7 +20,8 @@ final class WMWeatherCollectionViewController: UICollectionViewController {
 
     init?(_ coder: NSCoder? = nil) {
         self.forecasts = [WMWeatherResponseObject]()
-        self.weatherCollectionView = UICollectionView()
+
+
 
         if let coder = coder {
             super.init(coder: coder)
@@ -33,6 +34,11 @@ final class WMWeatherCollectionViewController: UICollectionViewController {
     convenience init?(forecasts: [WMWeatherResponseObject]) {
         self.init()
         self.forecasts = forecasts
+        self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+        self.collectionView?.registerClass(WMWeatherCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        //self.view = self.collectionView
+        loadCollectionView()
+
     }
 
 
@@ -53,11 +59,35 @@ final class WMWeatherCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as? WMWeatherCollectionViewCell
+        if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as? WMWeatherCollectionViewCell {
+
+            let day = forecasts[indexPath.row]
         
-        cell.backgroundColor = UIColor.orangeColor()
-        return cell
+            cell.backgroundColor = UIColor(netHex: 0xCEDEF1)
+            cell.highLabel.text = day.high
+            cell.lowLabel.text = day.low
+            cell.dateLabel.text = day.date
+            cell.forecastImageView.image = UIImage(named: day.forecast)
+
+            return cell
+        }else {
+            let cell = UICollectionViewCell()
+            return cell
+        }
     }
+
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+
+        let inset:CGFloat = 20
+
+        let margins:CGFloat = 10 * 2 //spacing between the cells. There will be 2 spacings
+        let width = CGFloat( (CGRectGetWidth(collectionView.frame) - inset - margins)/3.0)
+        return CGSizeMake(width, 152)
+    }
+    
+
+
+
 
 
     // MARK: UIViewController
@@ -66,25 +96,32 @@ final class WMWeatherCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        weatherCollectionView.backgroundColor = UIColor(netHex: 0xEEF4FB)
+        if let weatherCollectionView = collectionView {
+            weatherCollectionView.backgroundColor = UIColor(netHex: 0xEEF4FB)
+
+        }
+
 
     }
 
+    func loadCollectionView() {
 
 
-    override func loadView() {
+        if var weatherCollectionView = collectionView {
 
-        self.view = UIView()
+            collectionView?.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+            let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+            //layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+//            layout.itemSize = CGSize(width: 180, height: 240)
 
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        layout.itemSize = CGSize(width: 90, height: 120)
 
-        weatherCollectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        weatherCollectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        weatherCollectionView.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(weatherCollectionView)
-
+            weatherCollectionView.frame = self.view.frame
+            weatherCollectionView.backgroundColor = UIColor.whiteColor()
+            
+        }
+        
     }
+
+
 
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
+final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NSURLSessionDelegate, NSURLSessionDataDelegate, NSURLSessionTaskDelegate {
 
     private var locationTextField: UITextField
     private var progressView: UIProgressView
@@ -18,7 +18,7 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
     private var expectedContentLength = 0
     private var buffer:NSMutableData = NSMutableData()
 
-
+    var handler: ((success: Bool, object: AnyObject?) -> ())?
 
     required convenience init?(coder aDecoder: NSCoder) {
         self.init(aDecoder)
@@ -57,6 +57,7 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
     locationTextField.textColor = UIColor.whiteColor()
     locationTextField.attributedPlaceholder = NSAttributedString(string:"Type here to enter your city..", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName :UIFont(name: "Avenir-Book", size: 20)!])
     locationTextField.textAlignment = .Center
+    locationTextField.delegate = self
 
 
     submitButton.setTitle("Submit", forState: .Normal)
@@ -87,6 +88,8 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
     submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
     submitButton.addTarget(self, action: #selector(onSubmitButtonPressed), forControlEvents: .TouchUpInside)
 
+    
+
 
 
 
@@ -98,7 +101,9 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
             WMNetworkingHelper.sharedInstance.retrieveWeather(city) { (data, error) in
 
                 if let weatherVC = WMWeatherCollectionViewController(forecasts: data) {
-                    self.presentViewController(weatherVC, animated: true, completion: nil)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.presentViewController(weatherVC, animated: true, completion: nil)
+                    })
                 }
 
 
@@ -113,8 +118,17 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
     //MARK: UITextFieldDelegate
 
     func textFieldDidBeginEditing(textField: UITextField) {
-        submitButton.hidden = false
 
+
+    }
+
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if textField.text?.characters.count > 0 {
+            submitButton.hidden = false
+
+
+        }
+        return true
     }
 
 
@@ -136,14 +150,37 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate {
 
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
 
-
         buffer.appendData(data)
 
-        let percentageDownloaded = Float(buffer.length) / Float(expectedContentLength)
-        progressView.progress =  percentageDownloaded
+//        let percentageDownloaded = Float(buffer.length) / Float(expectedContentLength)
+//        progressView.progress =  percentageDownloaded
+
+
+        var progress: Float!
+
+        if expectedContentLength < 0 {
+            progress = (Float(buffer.length) % 10_000_000.0) / 10_000_000.0
+        } else {
+            progress = Float(buffer.length) / Float(expectedContentLength)
+        }
+
+        progressView.progress = progress
     }
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         progressView.progress = 1.0   // download complete
+
+        let data = buffer
+            let json = try? NSJSONSerialization.JSONObjectWithData(data, options: [])
+            if let response = task.response as? NSHTTPURLResponse where 200...299 ~= response.statusCode {
+                self.handler?(success: true, object: json)
+            }else {
+                print("error: \(error!.localizedDescription)")
+                self.handler?(success: false, object: json)
+
+            }
+
+        buffer = NSMutableData()
+
     }
 
 
