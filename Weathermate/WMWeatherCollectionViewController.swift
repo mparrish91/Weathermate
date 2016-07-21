@@ -64,10 +64,14 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
             let day = forecasts[indexPath.row]
         
             cell.backgroundColor = UIColor(netHex: 0xCEDEF1)
-            cell.highLabel.text = day.high
-            cell.lowLabel.text = day.low
-            cell.dateLabel.text = day.date
-            cell.forecastImageView.image = UIImage(named: day.forecast)
+            cell.highLabel.text = "high " + day.high!
+            cell.lowLabel.text = "low " + day.low!
+            cell.dateLabel.text = day.newDate
+            if let forecast = day.forecast {
+                cell.forecastImageView.image = UIImage(named: forecast)
+
+
+            }
 
             return cell
         }else {

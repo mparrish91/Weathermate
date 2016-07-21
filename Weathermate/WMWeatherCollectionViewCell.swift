@@ -31,15 +31,15 @@ class WMWeatherCollectionViewCell: UICollectionViewCell {
         self.layer.masksToBounds = true
 
         contentView.addSubview(forecastImageView)
-//        contentView.addSubview(highLabel)
-//        contentView.addSubview(lowLabel)
+        contentView.addSubview(highLabel)
+        contentView.addSubview(lowLabel)
         contentView.addSubview(dateLabel)
 
         let margins = contentView.layoutMarginsGuide
 
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 20).active = true
-        dateLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 5).active = true
+        dateLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 10).active = true
+        dateLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 3).active = true
         dateLabel.font = UIFont(name: "Avenir-Book", size: 14)
         dateLabel.textColor = UIColor.whiteColor()
 
@@ -47,9 +47,22 @@ class WMWeatherCollectionViewCell: UICollectionViewCell {
 
         forecastImageView.translatesAutoresizingMaskIntoConstraints = false
         forecastImageView.topAnchor.constraintEqualToAnchor(dateLabel.bottomAnchor, constant: 5).active = true
-        forecastImageView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 5).active = true
-        forecastImageView.widthAnchor.constraintEqualToAnchor(nil, constant: 50).active = true
-        forecastImageView.heightAnchor.constraintEqualToAnchor(nil, constant: 50).active = true
+        forecastImageView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 3).active = true
+        forecastImageView.widthAnchor.constraintEqualToAnchor(nil, constant: 40).active = true
+        forecastImageView.heightAnchor.constraintEqualToAnchor(nil, constant: 40).active = true
+        forecastImageView.contentMode = .ScaleAspectFit
+
+        highLabel.translatesAutoresizingMaskIntoConstraints = false
+        highLabel.topAnchor.constraintEqualToAnchor(forecastImageView.bottomAnchor, constant: 5).active = true
+        highLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 3).active = true
+        highLabel.font = UIFont(name: "Avenir-Book", size: 14)
+        highLabel.textColor = UIColor.whiteColor()
+
+        lowLabel.translatesAutoresizingMaskIntoConstraints = false
+        lowLabel.topAnchor.constraintEqualToAnchor(highLabel.bottomAnchor, constant: 5).active = true
+        lowLabel.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 3).active = true
+        lowLabel.font = UIFont(name: "Avenir-Book", size: 14)
+        lowLabel.textColor = UIColor.whiteColor()
 
 
 
