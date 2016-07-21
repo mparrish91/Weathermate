@@ -95,6 +95,7 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
 
     }
 
+    // FIXME:Input only works without spaces
     func onSubmitButtonPressed(sender: UIButton) {
 
         if let city = locationTextField.text {
