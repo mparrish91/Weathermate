@@ -18,6 +18,9 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     private var expectedContentLength = 0
     private var buffer:NSMutableData = NSMutableData()
 
+    var currentDeviceOrientation: UIDeviceOrientation = .Unknown
+
+
     var handler: ((success: Bool, object: AnyObject?) -> ())?
 
     required convenience init?(coder aDecoder: NSCoder) {
@@ -88,11 +91,48 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
     submitButton.addTarget(self, action: #selector(onSubmitButtonPressed), forControlEvents: .TouchUpInside)
 
-    
+
+    //device rotation
+    UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceDidRotate:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+    self.currentDeviceOrientation = UIDevice.currentDevice().orientation
 
 
 
 
+    }
+
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        if UIDevice.currentDevice().generatesDeviceOrientationNotifications {
+            UIDevice.currentDevice().endGeneratingDeviceOrientationNotifications()
+        }
+    }
+
+
+    // Swift
+    func deviceDidRotate(notification: NSNotification) {
+        let currentOrientation = UIDevice.currentDevice().orientation
+
+        // Ignore changes in device orientation if unknown, face up, or face down.
+        if !UIDeviceOrientationIsValidInterfaceOrientation(currentOrientation) {
+            return;
+        }
+
+        let isLandscape = UIDeviceOrientationIsLandscape(currentOrientation);
+        let isPortrait = UIDeviceOrientationIsPortrait(currentOrientation);
+
+        if isLandscape {
+            //setLandscape constraints
+            setRotatedLayout()
+
+        }else{
+            //set Potrait constraints
+            setPotraitLayout()
+        }
     }
 
     // FIXME:Input only works without spaces
@@ -113,6 +153,13 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         }
 
 
+
+    }
+
+    // FIXME:Present alert to user on bad city
+
+    func presesntAlert() {
+        //reset the progress view
 
     }
 
@@ -181,6 +228,63 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
             }
 
         buffer = NSMutableData()
+
+    }
+
+
+    func setRotatedLayout() {
+
+        let margins = view.layoutMarginsGuide
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+        titleLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 50).active = true
+
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.topAnchor.constraintEqualToAnchor(titleLabel.layoutMarginsGuide.bottomAnchor, constant: 50).active = true
+        progressView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
+        progressView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationTextField.topAnchor.constraintEqualToAnchor(progressView.bottomAnchor, constant: 50).active = true
+        locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
+        locationTextField.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+        submitButton.hidden = true
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+        submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 25).active = true
+        submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+
+
+         self.view.layoutIfNeeded()
+
+    }
+
+    func setPotraitLayout() {
+        let margins = view.layoutMarginsGuide
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+        titleLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 100).active = true
+
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.topAnchor.constraintEqualToAnchor(titleLabel.layoutMarginsGuide.bottomAnchor, constant: 100).active = true
+        progressView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
+        progressView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationTextField.topAnchor.constraintEqualToAnchor(progressView.bottomAnchor, constant: 100).active = true
+        locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
+        locationTextField.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+        submitButton.hidden = true
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+        submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 50).active = true
+        submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+
+         self.view.layoutIfNeeded()
 
     }
 
