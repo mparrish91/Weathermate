@@ -16,12 +16,7 @@ final class WMNetworkingHelper: NSObject {
 
     func retrieveWeather(city: String, completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
 
-//        func retrieveWeather(completionHandler: (data: [WMWeatherResponseObject], error: NSError?) -> Void) -> Void {
-
-
         let newURL = NSURL(string:newYahooQueryURL(city))
-
-//        let requestURL = NSURL(string: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22nome%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
 
         if let requestUrl = newURL {
 
@@ -33,8 +28,7 @@ final class WMNetworkingHelper: NSObject {
                     var objectArray = [WMWeatherResponseObject]()
 
                     if success {
-                        if let dataSource = object!["query"] as? [String:AnyObject] {
-                            if let forecastArray = dataSource["results"]?["channel"]??["item"]??["forecast"] as? [[String:AnyObject]] {
+                            if let dataSource = object?["query"] as? [String:AnyObject], forecastArray = dataSource["results"]?["channel"]??["item"]??["forecast"] as? [[String:AnyObject]] {
 
                                 for dic in forecastArray {
                                     let newResponseObject = WMWeatherResponseObject(dictionary: dic)
@@ -45,7 +39,7 @@ final class WMNetworkingHelper: NSObject {
                                 if dataSource.isEmpty == false {
                                     completionHandler(data: objectArray, error: nil)
                                 }
-                            }else {
+                            }else if let dataSource = object?["query"] as? [String:AnyObject] {
                                 print("error retrieving forecasts ")
 
                                 if dataSource["count"] as? Int == 0 {
@@ -54,10 +48,11 @@ final class WMNetworkingHelper: NSObject {
 
                                 }
                             }
-                        }else {
-                            print("error retrieving dataSource")
+                            else {
+                                NSNotificationCenter.defaultCenter().postNotificationName("badRequest", object: nil)
 
                         }
+
                     }else{
                         print("error performing request")
                     }
@@ -72,8 +67,8 @@ final class WMNetworkingHelper: NSObject {
     func newYahooQueryURL(city: String) -> String {
 
         //properly places the city in the query string, does not account for state
-        var beginningString = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"
-        var endingString = "%2C%20%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+        let beginningString = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"
+        let endingString = "%2C%20%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
         let URL = beginningString + city + endingString
         return URL
 

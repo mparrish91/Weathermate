@@ -18,7 +18,7 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     private var expectedContentLength = 0
     private var buffer:NSMutableData = NSMutableData()
 
-    var currentDeviceOrientation: UIDeviceOrientation = .Unknown
+    private var currentDeviceOrientation: UIDeviceOrientation = .Unknown
 
 
     var handler: ((success: Bool, object: AnyObject?) -> ())?
@@ -46,22 +46,17 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
 
   override func viewDidLoad() {
         super.viewDidLoad()
-        let margins = view.layoutMarginsGuide
         view.backgroundColor = UIColor(netHex: 0xCEDEF1)
-
 
     titleLabel.text = "Weathermate"
     titleLabel.font = UIFont(name: "Avenir-Book", size: 36)
     titleLabel.textColor = UIColor.whiteColor()
-    
-
 
     locationTextField.font = UIFont(name: "Avenir-Book", size: 20)
     locationTextField.textColor = UIColor.whiteColor()
     locationTextField.attributedPlaceholder = NSAttributedString(string:"Type here to enter your city..", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName :UIFont(name: "Avenir-Book", size: 20)!])
     locationTextField.textAlignment = .Center
     locationTextField.delegate = self
-
 
     submitButton.setTitle("Submit", forState: .Normal)
     submitButton.titleLabel?.font = UIFont(name: "Avenir-Book", size: 20)
@@ -71,34 +66,13 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     progressView.progressTintColor = UIColor.yellowColor()
     progressView.trackTintColor = UIColor.whiteColor()
 
-    titleLabel.translatesAutoresizingMaskIntoConstraints = false
-    titleLabel.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-    titleLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 100).active = true
-
-    progressView.translatesAutoresizingMaskIntoConstraints = false
-    progressView.topAnchor.constraintEqualToAnchor(titleLabel.layoutMarginsGuide.bottomAnchor, constant: 100).active = true
-    progressView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
-    progressView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-
-    locationTextField.translatesAutoresizingMaskIntoConstraints = false
-    locationTextField.topAnchor.constraintEqualToAnchor(progressView.bottomAnchor, constant: 100).active = true
-    locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
-    locationTextField.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-
     submitButton.hidden = true
-    submitButton.translatesAutoresizingMaskIntoConstraints = false
-    submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 50).active = true
-    submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
     submitButton.addTarget(self, action: #selector(onSubmitButtonPressed), forControlEvents: .TouchUpInside)
 
+    setPotraitLayout()
 
-    //device rotation
-    UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceDidRotate:", name: UIDeviceOrientationDidChangeNotification, object: nil)
-    self.currentDeviceOrientation = UIDevice.currentDevice().orientation
-
-
-
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WMUserInputViewController.presentBadInputAlert), name: "badCity", object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WMUserInputViewController.presentBadRequestAlert), name: "badRequest", object: nil)
 
     }
 
@@ -112,8 +86,27 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         }
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
 
-    // Swift
+        //device rotation
+        UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceDidRotate:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+        self.currentDeviceOrientation = UIDevice.currentDevice().orientation
+            }
+
+
+    override func loadView() {
+        self.view = UIView()
+        self.view.addSubview(locationTextField)
+        self.view.addSubview(progressView)
+        self.view.addSubview(titleLabel)
+        self.view.addSubview(submitButton)
+    }
+
+    
+
+
     func deviceDidRotate(notification: NSNotification) {
         let currentOrientation = UIDevice.currentDevice().orientation
 
@@ -123,23 +116,19 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         }
 
         let isLandscape = UIDeviceOrientationIsLandscape(currentOrientation);
-        let isPortrait = UIDeviceOrientationIsPortrait(currentOrientation);
 
         if isLandscape {
-            //setLandscape constraints
             setRotatedLayout()
 
         }else{
-            //set Potrait constraints
             setPotraitLayout()
         }
     }
 
-    // FIXME:Input only works without spaces
-    func onSubmitButtonPressed(sender: UIButton) {
+      func onSubmitButtonPressed(sender: UIButton) {
 
         if let city = locationTextField.text {
-            WMNetworkingHelper.sharedInstance.retrieveWeather(city) { (data, error) in
+            WMNetworkingHelper.sharedInstance.retrieveWeather(city.removeWhitespace()) { (data, error) in
 
                 if let weatherVC = WMWeatherCollectionViewController(forecasts: data) {
                     dispatch_async(dispatch_get_main_queue(), {
@@ -156,24 +145,35 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
 
     }
 
-    // FIXME:Present alert to user on bad city
-
-    func presesntAlert() {
+    func presentBadInputAlert() {
         //reset the progress view
+        progressView.progress = 0
 
+        let alertController = UIAlertController(title: nil, message: "oops looks like that city is not supported", preferredStyle: .ActionSheet)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action) -> Void in
+        }))
+
+        presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+
+    func presentBadRequestAlert() {
+        //reset the progress view
+        progressView.progress = 0
+
+        let alertController = UIAlertController(title: nil, message: "oops something went wrong. Please try again", preferredStyle: .ActionSheet)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action) -> Void in
+        }))
+
+        presentViewController(alertController, animated: true, completion: nil)
+        
     }
 
     //MARK: UITextFieldDelegate
 
-    func textFieldDidBeginEditing(textField: UITextField) {
-
-
-    }
-
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         if textField.text?.characters.count > 0 {
             submitButton.hidden = false
-
 
         }
         return true
@@ -186,11 +186,11 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         return true
     }
 
+
     //MARK: NSURLSession
 
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
 
-        //here you can get full lenth of your content
         expectedContentLength = Int(response.expectedContentLength)
         print(expectedContentLength)
         completionHandler(NSURLSessionResponseDisposition.Allow)
@@ -199,6 +199,8 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
 
         buffer.appendData(data)
+
+        //want to look into more/ hack for showing download progress. because expected length always -1 currently
 
 //        let percentageDownloaded = Float(buffer.length) / Float(expectedContentLength)
 //        progressView.progress =  percentageDownloaded
@@ -231,8 +233,11 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
 
     }
 
+    //MARK: AutoLayout
 
     func setRotatedLayout() {
+//        clearConstraints()
+
 
         let margins = view.layoutMarginsGuide
 
@@ -254,15 +259,21 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 25).active = true
         submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-
-
-
          self.view.layoutIfNeeded()
 
     }
 
     func setPotraitLayout() {
+//        clearConstraints()
+
         let margins = view.layoutMarginsGuide
+
+        view.translatesAutoresizingMaskIntoConstraints = true
+//        view.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 0).active = true
+//        view.bottomAnchor.constraintEqualToAnchor(margins.bottomAnchor, constant: 0).active = true
+//        view.trailingAnchor.constraintEqualToAnchor(margins.trailingAnchor, constant: 0).active = true
+//        view.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 0).active = true
+
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
@@ -283,19 +294,20 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 50).active = true
         submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
 
-
          self.view.layoutIfNeeded()
 
     }
 
-
-
-    override func loadView() {
-        self.view = UIView()
-        self.view.addSubview(locationTextField)
-        self.view.addSubview(progressView)
-        self.view.addSubview(titleLabel)
-        self.view.addSubview(submitButton)
+    func clearConstraints() {
+        self.titleLabel.removeConstraints(self.titleLabel.constraints)
+        self.progressView.removeConstraints(self.progressView.constraints)
+        self.locationTextField.removeConstraints(self.locationTextField.constraints)
+        self.submitButton.removeConstraints(self.submitButton.constraints)
+        //self.view.removeConstraints(self.view.constraints)
     }
+
+
+
+
 
 }

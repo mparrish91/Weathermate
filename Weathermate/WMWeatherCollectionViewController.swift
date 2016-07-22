@@ -11,7 +11,6 @@ import UIKit
 final class WMWeatherCollectionViewController: UICollectionViewController  {
 
     private var forecasts: [WMWeatherResponseObject]
-//    private var weatherCollectionView: UICollectionView
 
 
     required convenience init?(coder aDecoder: NSCoder) {
@@ -20,7 +19,6 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
 
     init?(_ coder: NSCoder? = nil) {
         self.forecasts = [WMWeatherResponseObject]()
-
 
 
         if let coder = coder {
@@ -36,19 +34,8 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
         self.forecasts = forecasts
         self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
         self.collectionView?.registerClass(WMWeatherCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        //self.view = self.collectionView
         loadCollectionView()
 
-    }
-
-
-
-
-    func retrieveWeatherNetworkingHelper() {
-
-    }
-
-    func handleRefresh(refreshControl: UIRefreshControl) {
     }
 
 
@@ -92,40 +79,33 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
 
 
 
-
-
-    // MARK: UIViewController
-
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        if let weatherCollectionView = collectionView {
-            weatherCollectionView.backgroundColor = UIColor(netHex: 0xEEF4FB)
-
-        }
-
-
-    }
-
     func loadCollectionView() {
 
 
         if var weatherCollectionView = collectionView {
 
-            collectionView?.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+            collectionView?.contentInset = UIEdgeInsets(top: 15, left: 10, bottom: 0, right: 10)
             let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-            //layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-//            layout.itemSize = CGSize(width: 180, height: 240)
-
 
             weatherCollectionView.frame = self.view.frame
-            weatherCollectionView.backgroundColor = UIColor.whiteColor()
-            
+            weatherCollectionView.backgroundColor = UIColor(netHex: 0xEEF4FB)
+            weatherCollectionView.alwaysBounceVertical = true
+            weatherCollectionView.bounces = true
+
+            weatherCollectionView.scrollEnabled = true
+
         }
         
     }
 
 
 
+}
+
+extension WMWeatherCollectionViewController {
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        if scrollView == self.collectionView && scrollView.contentOffset.y < -30{
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
 }

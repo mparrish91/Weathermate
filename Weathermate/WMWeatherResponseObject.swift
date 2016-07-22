@@ -8,7 +8,7 @@
 
 import Foundation
 
-class WMWeatherResponseObject: NSObject {
+final class WMWeatherResponseObject: NSObject {
 
     var newDate: String?
     var date : String?

@@ -15,6 +15,7 @@
 		424A98621D3C088100CAE45E /* WMNetworkingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */; };
 		424A98641D3C08AE00CAE45E /* WMWeatherResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */; };
 		424A98661D3CB07600CAE45E /* WMRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424A98651D3CB07600CAE45E /* WMRequest.swift */; };
+		42FA90C01D4208DD003C3F16 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FA90BF1D4208DD003C3F16 /* StringExtensions.swift */; };
 		42FF27531D3EE81F007A37E7 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FF27521D3EE81F007A37E7 /* UIColorExtensions.swift */; };
 		42FF27551D3F8096007A37E7 /* WMWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FF27541D3F8096007A37E7 /* WMWeatherCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 		424A98611D3C088100CAE45E /* WMNetworkingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMNetworkingHelper.swift; sourceTree = "<group>"; };
 		424A98631D3C08AE00CAE45E /* WMWeatherResponseObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMWeatherResponseObject.swift; sourceTree = "<group>"; };
 		424A98651D3CB07600CAE45E /* WMRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMRequest.swift; sourceTree = "<group>"; };
+		42FA90BF1D4208DD003C3F16 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		42FF27521D3EE81F007A37E7 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		42FF27541D3F8096007A37E7 /* WMWeatherCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WMWeatherCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -83,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				42FF27521D3EE81F007A37E7 /* UIColorExtensions.swift */,
+				42FA90BF1D4208DD003C3F16 /* StringExtensions.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -160,6 +163,7 @@
 				424A98601D3C081E00CAE45E /* WMUserInputViewController.swift in Sources */,
 				42FF27531D3EE81F007A37E7 /* UIColorExtensions.swift in Sources */,
 				424A98641D3C08AE00CAE45E /* WMWeatherResponseObject.swift in Sources */,
+				42FA90C01D4208DD003C3F16 /* StringExtensions.swift in Sources */,
 				424A984C1D3C075300CAE45E /* AppDelegate.swift in Sources */,
 				424A985E1D3C07D800CAE45E /* WMWeatherCollectionViewController.swift in Sources */,
 				42FF27551D3F8096007A37E7 /* WMWeatherCollectionViewCell.swift in Sources */,

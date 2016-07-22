@@ -15,8 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-//
+
+        UIApplication.sharedApplication().statusBarHidden = true
 
 
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
+    
 
     func returnRootVC() -> UIViewController {
         if let rootViewController = self.window!.rootViewController{

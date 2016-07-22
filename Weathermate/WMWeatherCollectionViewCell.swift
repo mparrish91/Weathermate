@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class WMWeatherCollectionViewCell: UICollectionViewCell {
+final class WMWeatherCollectionViewCell: UICollectionViewCell {
 
     var forecastImageView: UIImageView
     var highLabel: UILabel
@@ -44,7 +44,6 @@ class WMWeatherCollectionViewCell: UICollectionViewCell {
         dateLabel.textColor = UIColor.whiteColor()
 
 
-
         forecastImageView.translatesAutoresizingMaskIntoConstraints = false
         forecastImageView.topAnchor.constraintEqualToAnchor(dateLabel.bottomAnchor, constant: 5).active = true
         forecastImageView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 3).active = true
@@ -65,19 +64,10 @@ class WMWeatherCollectionViewCell: UICollectionViewCell {
         lowLabel.textColor = UIColor.whiteColor()
 
 
-
-
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-
-
-    override func layoutSubviews() {
-
-
     }
 
 
