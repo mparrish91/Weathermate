@@ -89,6 +89,8 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        progressView.progress = 0
+
         //device rotation
         UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "deviceDidRotate:", name: UIDeviceOrientationDidChangeNotification, object: nil)
@@ -235,8 +237,9 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
 
     //MARK: AutoLayout
 
+    // FIXME: Still getting some broken constraints - look into autoresizng
     func setRotatedLayout() {
-//        clearConstraints()
+        clearConstraints()
 
 
         let margins = view.layoutMarginsGuide
@@ -255,7 +258,6 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
         locationTextField.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
 
-        submitButton.hidden = true
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 25).active = true
         submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
@@ -264,16 +266,11 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     }
 
     func setPotraitLayout() {
-//        clearConstraints()
+        clearConstraints()
 
         let margins = view.layoutMarginsGuide
 
         view.translatesAutoresizingMaskIntoConstraints = true
-//        view.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 0).active = true
-//        view.bottomAnchor.constraintEqualToAnchor(margins.bottomAnchor, constant: 0).active = true
-//        view.trailingAnchor.constraintEqualToAnchor(margins.trailingAnchor, constant: 0).active = true
-//        view.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 0).active = true
-
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
@@ -289,7 +286,6 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
         locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = true
         locationTextField.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
 
-        submitButton.hidden = true
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 50).active = true
         submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
@@ -299,11 +295,26 @@ final class WMUserInputViewController: UIViewController, UITextFieldDelegate, NS
     }
 
     func clearConstraints() {
-        self.titleLabel.removeConstraints(self.titleLabel.constraints)
-        self.progressView.removeConstraints(self.progressView.constraints)
-        self.locationTextField.removeConstraints(self.locationTextField.constraints)
-        self.submitButton.removeConstraints(self.submitButton.constraints)
-        //self.view.removeConstraints(self.view.constraints)
+        //set constraints to inactive 
+
+        let margins = view.layoutMarginsGuide
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = false
+        titleLabel.topAnchor.constraintEqualToAnchor(margins.topAnchor, constant: 100).active = false
+
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.topAnchor.constraintEqualToAnchor(titleLabel.layoutMarginsGuide.bottomAnchor, constant: 100).active = false
+        progressView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = false
+        progressView.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
+
+        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationTextField.topAnchor.constraintEqualToAnchor(progressView.bottomAnchor, constant: 100).active = false
+        locationTextField.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor, constant: 20).active = false
+        locationTextField.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = false
+
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+        submitButton.topAnchor.constraintEqualToAnchor(locationTextField.layoutMarginsGuide.bottomAnchor, constant: 50).active = false
+        submitButton.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = false
     }
 
 
