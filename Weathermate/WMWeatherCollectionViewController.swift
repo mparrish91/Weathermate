@@ -10,7 +10,7 @@ import UIKit
 
 final class WMWeatherCollectionViewController: UICollectionViewController  {
 
-    private var forecasts: [WMWeatherResponseObject]
+    fileprivate var forecasts: [WMWeatherResponseObject]
 
 
     required convenience init?(coder aDecoder: NSCoder) {
@@ -32,8 +32,8 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
     convenience init?(forecasts: [WMWeatherResponseObject]) {
         self.init()
         self.forecasts = forecasts
-        self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
-        self.collectionView?.registerClass(WMWeatherCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+        self.collectionView?.register(WMWeatherCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         loadCollectionView()
 
     }
@@ -41,12 +41,12 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
 
     // MARK: UICollectionView
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return forecasts.count ?? 0
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as? WMWeatherCollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? WMWeatherCollectionViewCell {
 
             let day = forecasts[indexPath.row]
         
@@ -67,13 +67,13 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
         }
     }
 
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
 
         let inset:CGFloat = 20
 
         let margins:CGFloat = 10 * 2 //spacing between the cells. There will be 2 spacings
-        let width = CGFloat( (CGRectGetWidth(collectionView.frame) - inset - margins)/3.0)
-        return CGSizeMake(width, 152)
+        let width = CGFloat( (collectionView.frame.width - inset - margins)/3.0)
+        return CGSize(width: width, height: 152)
     }
     
 
@@ -82,7 +82,7 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
     func loadCollectionView() {
 
 
-        if var weatherCollectionView = collectionView {
+        if let weatherCollectionView = collectionView {
 
             collectionView?.contentInset = UIEdgeInsets(top: 15, left: 10, bottom: 0, right: 10)
             let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -92,7 +92,7 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
             weatherCollectionView.alwaysBounceVertical = true
             weatherCollectionView.bounces = true
 
-            weatherCollectionView.scrollEnabled = true
+            weatherCollectionView.isScrollEnabled = true
 
         }
         
@@ -103,9 +103,9 @@ final class WMWeatherCollectionViewController: UICollectionViewController  {
 }
 
 extension WMWeatherCollectionViewController {
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == self.collectionView && scrollView.contentOffset.y < -30{
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
 }

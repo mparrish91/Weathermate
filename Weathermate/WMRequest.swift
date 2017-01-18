@@ -13,44 +13,44 @@ import UIKit
 final class WMRequest: NSObject {
 
     var requestMethod: String
-    var URL: NSURL
+    var URL: Foundation.URL
 
-    typealias WMRequestHandler = (success: Bool, object: AnyObject?) -> ()
+    typealias WMRequestHandler = (_ success: Bool, _ object: AnyObject?) -> ()
 
 
-    init(requestMethod: String, url: NSURL) {
+    init(requestMethod: String, url: Foundation.URL) {
         self.requestMethod = requestMethod
         self.URL = url
 
     }
 
-    func preparedURLRequest() -> NSURLRequest {
+    func preparedURLRequest() -> URLRequest {
 
         let preparedURLString = self.URL.absoluteString
-        let preparedURL = NSURL(string: preparedURLString)
-        let request = NSMutableURLRequest(URL: preparedURL!)
-        request.HTTPMethod = self.requestMethod
+        let preparedURL = Foundation.URL(string: preparedURLString)
+        let request = NSMutableURLRequest(url: preparedURL!)
+        request.httpMethod = self.requestMethod
 
-        return request
+        return request as URLRequest
 
 
     }
 
-    func performRequestWithHandler(handler: WMRequestHandler) {
+    func performRequestWithHandler(_ handler: @escaping WMRequestHandler) {
 
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let delegate = appDelegate.returnRootVC() as? NSURLSessionDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let delegate = appDelegate.returnRootVC() as? URLSessionDelegate
 
         if let vc = delegate as? WMUserInputViewController {
             vc.handler = handler
         }
 
         let request = preparedURLRequest()
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let manqueue = NSOperationQueue.mainQueue()
-        let session = NSURLSession(configuration: configuration, delegate:delegate, delegateQueue: manqueue)
+        let configuration = URLSessionConfiguration.default
+        let manqueue = OperationQueue.main
+        let session = URLSession(configuration: configuration, delegate:delegate, delegateQueue: manqueue)
 
-        let task = session.dataTaskWithRequest(request)
+        let task = session.dataTask(with: request)
         task.resume()
 
     }

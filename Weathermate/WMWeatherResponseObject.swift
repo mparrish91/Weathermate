@@ -29,13 +29,13 @@ final class WMWeatherResponseObject: NSObject {
     }
 
 
-    func setConvertedDate(dateString: String) {
-        let dateFormatter = NSDateFormatter()
+    func setConvertedDate(_ dateString: String) {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM yyyy"
-        if let dateObject = dateFormatter.dateFromString(dateString) {
+        if let dateObject = dateFormatter.date(from: dateString) {
 
             dateFormatter.dateFormat = "M.dd"
-            self.newDate = dateFormatter.stringFromDate(dateObject)
+            self.newDate = dateFormatter.string(from: dateObject)
 
         }else{
             self.newDate = ""
